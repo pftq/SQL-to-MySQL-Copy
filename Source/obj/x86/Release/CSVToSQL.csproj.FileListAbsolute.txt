@@ -1,0 +1,15 @@
+J:\PFTQ\CSharp\BatchCSVToSQL\CSVToSQL\bin\Release\CSVToSQL.exe.config
+J:\PFTQ\CSharp\BatchCSVToSQL\CSVToSQL\bin\Release\CSVToSQL.exe
+J:\PFTQ\CSharp\BatchCSVToSQL\CSVToSQL\bin\Release\CSVToSQL.pdb
+J:\PFTQ\CSharp\BatchCSVToSQL\CSVToSQL\obj\x86\Release\CSVToSQL.CSVToSQL.resources
+J:\PFTQ\CSharp\BatchCSVToSQL\CSVToSQL\obj\x86\Release\CSVToSQL.csproj.GenerateResource.Cache
+J:\PFTQ\CSharp\BatchCSVToSQL\CSVToSQL\obj\x86\Release\CSVToSQL.exe
+J:\PFTQ\CSharp\BatchCSVToSQL\CSVToSQL\obj\x86\Release\CSVToSQL.pdb
+J:\PFTQ\CSharp\CSVToSQL\CSVToSQL\bin\Release\CSVToSQL.exe.config
+J:\PFTQ\CSharp\CSVToSQL\CSVToSQL\obj\x86\Release\CSVToSQL.exe
+J:\PFTQ\CSharp\CSVToSQL\CSVToSQL\obj\x86\Release\CSVToSQL.pdb
+J:\PFTQ\CSharp\CSVToSQL\CSVToSQL\bin\Release\CSVToSQL.exe
+J:\PFTQ\CSharp\CSVToSQL\CSVToSQL\bin\Release\CSVToSQL.pdb
+J:\PFTQ\CSharp\CSVToSQL\CSVToSQL\obj\x86\Release\CSVToSQL.CSVToSQL.resources
+J:\PFTQ\CSharp\CSVToSQL\CSVToSQL\obj\x86\Release\CSVToSQL.csproj.GenerateResource.Cache
+J:\PFTQ\CSharp\CSVToSQL\CSVToSQL\obj\x86\Release\CSVToSQL.csprojResolveAssemblyReference.cache

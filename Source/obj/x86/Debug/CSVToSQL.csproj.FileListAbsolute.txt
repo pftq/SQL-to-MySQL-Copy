@@ -1,0 +1,13 @@
+C:\Users\WMok\Desktop\CSVToSQL\CSVToSQL\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\WMok\Desktop\CSVToSQL\CSVToSQL\obj\x86\Debug\CSVToSQL.CSVToSQL.resources
+C:\Users\WMok\Desktop\CSVToSQL\CSVToSQL\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\WMok\Desktop\CSVToSQL\CSVToSQL\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\WMok\Desktop\CSVToSQL\CSVToSQL\bin\Debug\CSVToSQL.exe.config
+C:\Users\WMok\Desktop\CSVToSQL\CSVToSQL\bin\Debug\CSVToSQL.exe
+C:\Users\WMok\Desktop\CSVToSQL\CSVToSQL\bin\Debug\CSVToSQL.pdb
+C:\Users\WMok\Desktop\CSVToSQL\CSVToSQL\obj\x86\Debug\CSVToSQL.exe
+C:\Users\WMok\Desktop\CSVToSQL\CSVToSQL\obj\x86\Debug\CSVToSQL.pdb
+J:\PFTQ\CSharp\BatchCSVToSQL\CSVToSQL\bin\Debug\CSVToSQL.exe.config
+J:\PFTQ\CSharp\BatchCSVToSQL\CSVToSQL\obj\x86\Debug\CSVToSQL.exe
+J:\PFTQ\CSharp\BatchCSVToSQL\CSVToSQL\obj\x86\Debug\CSVToSQL.pdb
+J:\PFTQ\CSharp\BatchCSVToSQL\CSVToSQL\bin\Debug\BatchCSVToSQL.exe.config

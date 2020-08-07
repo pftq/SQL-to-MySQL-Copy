@@ -1,0 +1,3 @@
+J:\PFTQ\CSharp\SQLToMySQL\Source\bin\Debug\SQLToSQL.exe.config
+J:\PFTQ\CSharp\SQLToMySQL\Source\obj\x86\Debug\SQLToSQL.exe
+J:\PFTQ\CSharp\SQLToMySQL\Source\obj\x86\Debug\SQLToSQL.pdb

@@ -1,0 +1,8 @@
+J:\PFTQ\CSharp\SQLToMySQL\Source\obj\x86\Release\SQLToMySQL.csprojResolveAssemblyReference.cache
+J:\PFTQ\CSharp\SQLToMySQL\Source\obj\x86\Release\SQLToMySQL.csproj.GenerateResource.Cache
+J:\PFTQ\CSharp\SQLToMySQL\Source\bin\Release\SQLToMySQL.exe.config
+J:\PFTQ\CSharp\SQLToMySQL\Source\obj\x86\Release\SQLToMySQL.SQLToMySQL.resources
+J:\PFTQ\CSharp\SQLToMySQL\Source\bin\Release\SQLToMySQL.exe
+J:\PFTQ\CSharp\SQLToMySQL\Source\bin\Release\SQLToMySQL.pdb
+J:\PFTQ\CSharp\SQLToMySQL\Source\obj\x86\Release\SQLToMySQL.exe
+J:\PFTQ\CSharp\SQLToMySQL\Source\obj\x86\Release\SQLToMySQL.pdb

@@ -1,0 +1,15 @@
+J:\PFTQ\CSharp\SQLToSQL\bin\Debug\SQLToSQL.exe.config
+J:\PFTQ\CSharp\SQLToSQL\bin\Debug\SQLToSQL.exe
+J:\PFTQ\CSharp\SQLToSQL\bin\Debug\SQLToSQL.pdb
+J:\PFTQ\CSharp\SQLToSQL\obj\x86\Debug\SQLToSQL.SQLToSQL.resources
+J:\PFTQ\CSharp\SQLToSQL\obj\x86\Debug\SQLToSQL.csproj.GenerateResource.Cache
+J:\PFTQ\CSharp\SQLToSQL\obj\x86\Debug\SQLToSQL.exe
+J:\PFTQ\CSharp\SQLToSQL\obj\x86\Debug\SQLToSQL.pdb
+J:\PFTQ\CSharp\SQLToSQL\Source\bin\Debug\SQLToSQL.exe.config
+J:\PFTQ\CSharp\SQLToSQL\Source\obj\x86\Debug\SQLToSQL.exe
+J:\PFTQ\CSharp\SQLToSQL\Source\obj\x86\Debug\SQLToSQL.pdb
+J:\PFTQ\CSharp\SQLToSQL\Source\bin\Debug\SQLToSQL.exe
+J:\PFTQ\CSharp\SQLToSQL\Source\bin\Debug\SQLToSQL.pdb
+J:\PFTQ\CSharp\SQLToSQL\Source\obj\x86\Debug\SQLToSQL.SQLToSQL.resources
+J:\PFTQ\CSharp\SQLToSQL\Source\obj\x86\Debug\SQLToSQL.csproj.GenerateResource.Cache
+J:\PFTQ\CSharp\SQLToSQL\Source\obj\x86\Debug\SQLToSQL.csprojResolveAssemblyReference.cache
