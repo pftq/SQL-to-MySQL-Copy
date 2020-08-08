@@ -80,7 +80,7 @@ namespace SQLToMySQL
                                         }
 
                                         object[] cells = new object[r.FieldCount];
-                                        for (int x = 0; x < r.FieldCount; x++)
+                                        for (int x = 0; x < r.FieldCount; x++) 
                                             cells[x] = r.GetValue(x);
 
                                         t.Rows.Add(cells);
@@ -170,7 +170,7 @@ namespace SQLToMySQL
                     using (MySqlCommand cmd = new MySqlCommand())
                     {
                         cmd.Connection = con;
-                        string update = "";
+                        
                         string columnnames = "";
                         foreach (DataColumn c in t.Columns)
                         {
@@ -181,15 +181,18 @@ namespace SQLToMySQL
                         {
                             string v = "";
                             int i = 0;
+                            string update = "";
                             foreach (object val in r.ItemArray)
                             {
                                 if (v != "") v += ", ";
-                                v += "'" + val.ToString() + "'";
-
+                                string output = val.ToString();
+                                if (t.Columns[i].DataType == System.Type.GetType("System.DateTime")) output = Convert.ToDateTime(val.ToString()).ToString("yyyy-MM-dd HH:mm:s");
+                                v += "'" + output + "'";
+                                
                                 if (i > 0)
                                 {
                                     if (update != "") update += ", ";
-                                    update += t.Columns[i] + "='" + val.ToString() + "'";
+                                    update += t.Columns[i] + "='" + output + "'";
                                 }
                                 i++;
                             }
@@ -265,7 +268,7 @@ namespace SQLToMySQL
         {
             s = DateTime.Now + ": " + s;
             Console.WriteLine(s);
-            if (log) File.AppendAllLines("SqlToMySql_log.txt", new string[] { s });
+            if (log) File.AppendAllLines("SqlToMySql_"+System.Diagnostics.Process.GetCurrentProcess().MainModule.ModuleName+".txt", new string[] { s });
         }
     }
 }
