@@ -16,7 +16,12 @@ namespace SQLToMySQL
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new SQLToMySQL(args));
+            SQLToMySQL s = new SQLToMySQL();
+            Application.Run(s);
+            if (args.Length > 0 && args[0].Trim() != "")
+            {
+                s.button1_Click(null, null);
+            }
         }
     }
 }

@@ -17,17 +17,17 @@ namespace SQLToMySQL
     public partial class SQLToMySQL : Form
     {
 
-        public SQLToMySQL(string[] args)
+        public SQLToMySQL()
         {
             InitializeComponent();
             ct.Text = "";
             status.Text = "";
 
-            if (args.Length > 0 && args[0].Trim() != "") button1_Click(null, null);
+            
         }
 
         private long threadLock = 0, threadError = 0;
-        private void button1_Click(object sender, EventArgs e)
+        public void button1_Click(object sender, EventArgs e)
         {
             button1.Enabled = false;
             Properties.Settings.Default.Save();
@@ -142,9 +142,10 @@ namespace SQLToMySQL
                         while (now <= waitUntil)
                         {
                             Application.DoEvents();
-                            Thread.Sleep(1000);
+                            Thread.Sleep(100);
                             now = DateTime.Now;
-                            status.Text = "" + (waitUntil - now).TotalSeconds.ToString("N0");
+                            if(status.Text!=(waitUntil - now).TotalSeconds.ToString("N0"))
+                                status.Text = "" + (waitUntil - now).TotalSeconds.ToString("N0");
                         }
                     }
                 }
@@ -185,14 +186,19 @@ namespace SQLToMySQL
                             foreach (object val in r.ItemArray)
                             {
                                 if (v != "") v += ", ";
-                                string output = val.ToString();
-                                if (t.Columns[i].DataType == System.Type.GetType("System.DateTime")) output = Convert.ToDateTime(val.ToString()).ToString("yyyy-MM-dd HH:mm:s");
-                                v += "'" + output + "'";
+
+                                string output = "'"+val.ToString()+"'";
+
+                                if (t.Columns[i].DataType == System.Type.GetType("System.DateTime")) output = "'" + Convert.ToDateTime(val.ToString()).ToString("yyyy-MM-dd HH:mm:s") + "'";
+                                else if (t.Columns[i].DataType == System.Type.GetType("System.Boolean")) output = Convert.ToBoolean(val.ToString()) == true ? "1" : "0";
+                                else if (t.Columns[i].DataType == System.Type.GetType("System.Int32") || t.Columns[i].DataType == System.Type.GetType("System.Int64") || t.Columns[i].DataType == System.Type.GetType("System.Double") || t.Columns[i].DataType == System.Type.GetType("System.Decimal")) output = val.ToString();
+
+                                v += output;
                                 
                                 if (i > 0)
                                 {
                                     if (update != "") update += ", ";
-                                    update += t.Columns[i] + "='" + output + "'";
+                                    update += t.Columns[i] + "=" + output + "";
                                 }
                                 i++;
                             }
