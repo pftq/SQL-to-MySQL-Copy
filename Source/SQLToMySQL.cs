@@ -33,10 +33,11 @@ namespace SQLToMySQL
             Properties.Settings.Default.Save();
 
 
-            try
+
+            bool go = true;
+            while (go)
             {
-                bool go = true;
-                while (go)
+                try
                 {
                     using (SqlConnection sourceCon = new SqlConnection("Server=" + serverSource.Text + ";Initial Catalog=" + dbSource.Text + (userSource.Text == "" ? ";Trusted_Connection=True;" : ";Persist Security Info=False;User ID=" + userSource.Text + ";Password=" + passSource.Text + ";Connection Timeout=30;")))
                     {
@@ -45,83 +46,101 @@ namespace SQLToMySQL
                         {
                             con.Open();
 
-                            if (clear.Checked)
+                            try
                             {
-                                status.Text = "Clearing dest. table...";
-                                using (MySqlCommand cmd = new MySqlCommand())
+                                if (clear.Checked)
                                 {
-                                    cmd.Connection = con;
-                                    cmd.CommandText = "TRUNCATE TABLE " + table.Text;
-                                    cmd.ExecuteNonQuery();
-                                }
-                                status.Text = "Dest. table cleared.";
-                            }
-
-                            List<string> rows = new List<string>();
-                            DataTable t = new System.Data.DataTable();
-                            int i = 0;
-
-                            using (SqlCommand com = new SqlCommand(tableSource.Text, sourceCon))
-                            {
-                                com.CommandTimeout = 3600;
-                                using (SqlDataReader r = com.ExecuteReader())
-                                {
-                                    while (r.Read())
+                                    status.Text = "Clearing dest. table...";
+                                    using (MySqlCommand cmd = new MySqlCommand())
                                     {
-                                        i++;
-                                        status.Text = "Reading...";
-                                        ct.Text = "Row " + i;
-                                        if (i % 10000 == 0) Application.DoEvents();
+                                        cmd.Connection = con;
+                                        cmd.CommandText = "TRUNCATE TABLE " + table.Text;
+                                        cmd.ExecuteNonQuery();
+                                    }
+                                    status.Text = "Dest. table cleared.";
+                                }
 
-                                        if (i == 1)
+                                List<string> rows = new List<string>();
+                                DataTable t = new System.Data.DataTable();
+                                int i = 0;
+
+                                using (SqlCommand com = new SqlCommand(tableSource.Text, sourceCon))
+                                {
+                                    com.CommandTimeout = 3600;
+                                    using (SqlDataReader r = com.ExecuteReader())
+                                    {
+                                        while (r.Read())
                                         {
-                                            for (int x = 0; x < r.FieldCount; x++)
-                                                t.Columns.Add(r.GetName(x), r.GetFieldType(x));
-                                        }
+                                            i++;
+                                            status.Text = "Reading...";
+                                            ct.Text = "Row " + i;
+                                            if (i % 10000 == 0) Application.DoEvents();
 
-                                        object[] cells = new object[r.FieldCount];
-                                        for (int x = 0; x < r.FieldCount; x++) 
-                                            cells[x] = r.GetValue(x);
-
-                                        t.Rows.Add(cells);
-
-                                        if (t.Rows.Count >= 100000)
-                                        {
-                                            Application.DoEvents();
-                                            status.Text = "Inserting...";
-                                            Interlocked.Increment(ref threadLock);
-                                            ThreadPool.QueueUserWorkItem(new WaitCallback(Insert), new object[] { con, table.Text, t, update.Checked });
-                                            while (threadLock > 0)
+                                            if (i == 1)
                                             {
-                                                Thread.Sleep(1000);
-                                                Application.DoEvents();
+                                                for (int x = 0; x < r.FieldCount; x++)
+                                                    t.Columns.Add(r.GetName(x), r.GetFieldType(x));
                                             }
-                                            if (threadError > 0)
+
+                                            object[] cells = new object[r.FieldCount];
+                                            for (int x = 0; x < r.FieldCount; x++)
+                                                cells[x] = r.GetValue(x);
+
+                                            t.Rows.Add(cells);
+
+                                            if (t.Rows.Count >= 100000)
                                             {
-                                                status.Text = "Errored.";
-                                                button1.Enabled = true;
-                                                return;
+                                                Application.DoEvents();
+                                                status.Text = "Inserting...";
+                                                Interlocked.Increment(ref threadLock);
+                                                ThreadPool.QueueUserWorkItem(new WaitCallback(Insert), new object[] { con, table.Text, t, update.Checked });
+                                                while (threadLock > 0)
+                                                {
+                                                    Thread.Sleep(1000);
+                                                    Application.DoEvents();
+                                                }
+                                                if (threadError > 0)
+                                                {
+                                                    status.Text = "Errored.";
+                                                    button1.Enabled = true;
+                                                    return;
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
-                            if (t.Rows.Count > 0)
-                            {
-                                Application.DoEvents();
-                                status.Text = "Inserting...";
-                                Interlocked.Increment(ref threadLock);
-                                ThreadPool.QueueUserWorkItem(new WaitCallback(Insert), new object[] { con, table.Text, t, update.Checked });
-                                while (threadLock > 0)
+                                if (t.Rows.Count > 0)
                                 {
-                                    Thread.Sleep(1000);
                                     Application.DoEvents();
+                                    status.Text = "Inserting...";
+                                    Interlocked.Increment(ref threadLock);
+                                    ThreadPool.QueueUserWorkItem(new WaitCallback(Insert), new object[] { con, table.Text, t, update.Checked });
+                                    while (threadLock > 0)
+                                    {
+                                        Thread.Sleep(1000);
+                                        Application.DoEvents();
+                                    }
+                                    if (threadError > 0)
+                                    {
+                                        status.Text = "Errored.";
+                                        if (loop.Checked) { }
+                                        else
+                                        {
+                                            button1.Enabled = true;
+                                            return;
+                                        }
+                                    }
                                 }
-                                if (threadError > 0)
+                                status.Text = "Done!";
+                            }
+                            catch (Exception exx)
+                            {
+                                status.Text = "Errored.";
+                                if (loop.Checked) { }
+                                else
                                 {
-                                    status.Text = "Errored.";
-                                    button1.Enabled = true;
-                                    return;
+                                    MessageBox.Show("Error: " + exx);
+                                    break;
                                 }
                             }
 
@@ -129,7 +148,7 @@ namespace SQLToMySQL
                         }
                         sourceCon.Close();
                     }
-                    status.Text = "Done!";
+                    
                     if (!loop.Checked)
                     {
                         go = false;
@@ -144,17 +163,23 @@ namespace SQLToMySQL
                             Application.DoEvents();
                             Thread.Sleep(100);
                             now = DateTime.Now;
-                            if(status.Text!=(waitUntil - now).TotalSeconds.ToString("N0"))
+                            if (status.Text != (waitUntil - now).TotalSeconds.ToString("N0"))
                                 status.Text = "" + (waitUntil - now).TotalSeconds.ToString("N0");
                         }
                     }
                 }
+                catch (Exception ex)
+                {
+                    status.Text = "Errored.";
+                    if (loop.Checked) { }
+                    else
+                    {
+                        MessageBox.Show("Error: " + ex);
+                        break;
+                    }
+                }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex);
-                status.Text = "Errored.";
-            }
+
             button1.Enabled = true;
         }
 
