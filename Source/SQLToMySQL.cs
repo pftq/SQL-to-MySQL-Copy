@@ -17,17 +17,27 @@ namespace SQLToMySQL
     public partial class SQLToMySQL : Form
     {
 
-        public SQLToMySQL()
+        public SQLToMySQL(string[] args)
         {
             InitializeComponent();
             ct.Text = "";
             status.Text = "";
 
-            
+            if (args.Length > 0 && args[0].Trim() != "")
+            {
+                status.Text = "Auto-starting...";
+                System.Threading.Thread.Sleep(5000);
+                Shown += (o, s) => { Start(); };
+            }
         }
 
         private long threadLock = 0, threadError = 0;
         public void button1_Click(object sender, EventArgs e)
+        {
+            Start();
+        }
+
+        public void Start()
         {
             button1.Enabled = false;
             Properties.Settings.Default.Save();
@@ -148,7 +158,7 @@ namespace SQLToMySQL
                         }
                         sourceCon.Close();
                     }
-                    
+
                     if (!loop.Checked)
                     {
                         go = false;
@@ -170,12 +180,20 @@ namespace SQLToMySQL
                 }
                 catch (Exception ex)
                 {
-                    status.Text = "Errored.";
-                    if (loop.Checked) { }
+                    if (Visible)
+                    {
+                        status.Text = "Errored.";
+                        if (loop.Checked) { }
+                        else
+                        {
+                            MessageBox.Show("Error: " + ex);
+                            break;
+                        }
+                    }
                     else
                     {
-                        MessageBox.Show("Error: " + ex);
-                        break;
+                        Environment.Exit(0);
+                        return;
                     }
                 }
             }

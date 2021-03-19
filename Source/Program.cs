@@ -16,12 +16,10 @@ namespace SQLToMySQL
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            SQLToMySQL s = new SQLToMySQL();
+            SQLToMySQL s = new SQLToMySQL(args);
             Application.Run(s);
-            if (args.Length > 0 && args[0].Trim() != "")
-            {
-                s.button1_Click(null, null);
-            }
+            
+            
         }
     }
 }
