@@ -149,7 +149,7 @@ namespace SQLToMySQL
                                 if (loop.Checked) { }
                                 else
                                 {
-                                    MessageBox.Show("Error: " + exx);
+                                    WriteLine("Error: " + exx);
                                     break;
                                 }
                             }
@@ -186,7 +186,7 @@ namespace SQLToMySQL
                         if (loop.Checked) { }
                         else
                         {
-                            MessageBox.Show("Error: " + ex);
+                            WriteLine("Error: " + ex);
                             break;
                         }
                     }
@@ -254,7 +254,10 @@ namespace SQLToMySQL
                                 //WriteLine(cmd.CommandText);
                                 cmd.ExecuteNonQuery();
                             }
-                            catch { MessageBox.Show("Error for: " + cmd.CommandText); }
+                            catch {
+                                status.Text = "Errored for insert.";
+                                WriteLine("Error for: " + cmd.CommandText); 
+                            }
                         }
                     }
                 }
@@ -266,7 +269,7 @@ namespace SQLToMySQL
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error on insert: " + ex);
+                WriteLine("Error on insert: " + ex);
                 Interlocked.Increment(ref threadError);
             }
             Interlocked.Decrement(ref threadLock);
