@@ -41,7 +41,7 @@ namespace SQLToMySQL
         {
             button1.Enabled = false;
             Properties.Settings.Default.Save();
-
+            
 
 
             bool go = true;
@@ -49,6 +49,8 @@ namespace SQLToMySQL
             {
                 try
                 {
+                   
+
                     using (SqlConnection sourceCon = new SqlConnection("Server=" + serverSource.Text + ";Initial Catalog=" + dbSource.Text + (userSource.Text == "" ? ";Trusted_Connection=True;" : ";Persist Security Info=False;User ID=" + userSource.Text + ";Password=" + passSource.Text + ";Connection Timeout=30;")))
                     {
                         sourceCon.Open();
@@ -146,12 +148,9 @@ namespace SQLToMySQL
                             catch (Exception exx)
                             {
                                 status.Text = "Errored.";
-                                if (loop.Checked) { }
-                                else
-                                {
-                                    WriteLine("Error: " + exx);
-                                    break;
-                                }
+
+                                WriteLine("Error: " + exx);
+                                break;
                             }
 
                             con.Close();
@@ -167,7 +166,7 @@ namespace SQLToMySQL
                     else
                     {
                         DateTime now = DateTime.Now;
-                        DateTime waitUntil = DateTime.Now.AddMinutes(1);
+                        DateTime waitUntil = DateTime.Now.AddSeconds(Convert.ToInt32(0+loopTime.Value));
                         while (now <= waitUntil)
                         {
                             Application.DoEvents();
@@ -214,49 +213,60 @@ namespace SQLToMySQL
                     using (MySqlCommand cmd = new MySqlCommand())
                     {
                         cmd.Connection = con;
-                        
-                        string columnnames = "";
-                        foreach (DataColumn c in t.Columns)
-                        {
-                            if (columnnames != "") columnnames += ", ";
-                            columnnames += c.ColumnName;
-                        }
+
+                        // Build column names with backticks for safety
+                        string columnnames = string.Join(", ", t.Columns.Cast<DataColumn>().Select(c => "`" + c.ColumnName + "`"));
+
+                        // Build placeholders
+                        string placeholders = string.Join(", ", Enumerable.Range(0, t.Columns.Count).Select(i => "@p" + i));
+
+                        // Build update part using VALUES() for columns starting from index 1
+                        string update = string.Join(", ", Enumerable.Range(1, t.Columns.Count - 1).Select(i => "`" + t.Columns[i].ColumnName + "`=VALUES(`" + t.Columns[i].ColumnName + "`)"));
+
+                        // Construct the SQL command text once
+                        cmd.CommandText = "INSERT INTO " + table + " (" + columnnames + ") VALUES (" + placeholders + ") ON DUPLICATE KEY UPDATE " + update;
+
                         foreach (DataRow r in t.Rows)
                         {
-                            string v = "";
-                            int i = 0;
-                            string update = "";
-                            foreach (object val in r.ItemArray)
+                            cmd.Parameters.Clear();
+
+                            for (int i = 0; i < t.Columns.Count; i++)
                             {
-                                if (v != "") v += ", ";
+                                object val = r[i];
+                                string paramName = "@p" + i;
 
-                                string output = "'"+val.ToString()+"'";
-
-                                if (t.Columns[i].DataType == System.Type.GetType("System.DateTime")) output = "'" + Convert.ToDateTime(val.ToString()).ToString("yyyy-MM-dd HH:mm:s") + "'";
-                                else if (t.Columns[i].DataType == System.Type.GetType("System.Boolean")) output = Convert.ToBoolean(val.ToString()) == true ? "1" : "0";
-                                else if (t.Columns[i].DataType == System.Type.GetType("System.Int32") || t.Columns[i].DataType == System.Type.GetType("System.Int64") || t.Columns[i].DataType == System.Type.GetType("System.Double") || t.Columns[i].DataType == System.Type.GetType("System.Decimal")) output = val.ToString();
-
-                                v += output;
-                                
-                                if (i > 0)
+                                // Add parameter based on data type
+                                if (t.Columns[i].DataType == typeof(System.DateTime))
                                 {
-                                    if (update != "") update += ", ";
-                                    update += t.Columns[i] + "=" + output + "";
+                                    cmd.Parameters.AddWithValue(paramName, (DateTime)val);
                                 }
-                                i++;
+                                else if (t.Columns[i].DataType == typeof(System.Boolean))
+                                {
+                                    cmd.Parameters.AddWithValue(paramName, (bool)val ? 1 : 0);
+                                }
+                                else if (t.Columns[i].DataType == typeof(System.Int32) ||
+                                         t.Columns[i].DataType == typeof(System.Int64) ||
+                                         t.Columns[i].DataType == typeof(System.Double) ||
+                                         t.Columns[i].DataType == typeof(System.Decimal))
+                                {
+                                    cmd.Parameters.AddWithValue(paramName, val);
+                                }
+                                else
+                                {
+                                    // For strings and other types, AddWithValue handles escaping
+                                    cmd.Parameters.AddWithValue(paramName, val);
+                                }
                             }
-                            cmd.CommandText = "INSERT INTO " + table + " (" + columnnames + @")
-        VALUES (" + v + @")
-        ON DUPLICATE KEY UPDATE 
-          " + update;
+
                             try
                             {
                                 //WriteLine(cmd.CommandText);
                                 cmd.ExecuteNonQuery();
                             }
-                            catch {
+                            catch (Exception e)
+                            {
                                 status.Text = "Errored for insert.";
-                                WriteLine("Error for: " + cmd.CommandText); 
+                                WriteLine("Error for: " + cmd.CommandText + "\n" + e.ToString());
                             }
                         }
                     }
