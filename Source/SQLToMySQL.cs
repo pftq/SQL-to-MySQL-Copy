@@ -113,6 +113,7 @@ namespace SQLToMySQL
                                                 }
                                                 if (threadError > 0)
                                                 {
+                                                    Thread.Sleep(1000);
                                                     status.Text = "Errored.";
                                                     button1.Enabled = true;
                                                     return;
@@ -135,6 +136,7 @@ namespace SQLToMySQL
                                     if (threadError > 0)
                                     {
                                         status.Text = "Errored.";
+                                        Thread.Sleep(1000);
                                         if (loop.Checked) { }
                                         else
                                         {
